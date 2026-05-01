@@ -1,0 +1,128 @@
+﻿<div class="assurance-page">
+	<section class="assurance-hero">
+		<div>
+			<p class="eyebrow">Action'Elles x NSIAGO'ASSUR</p>
+			<h1>{{ titrePage() }}</h1>
+			<p class="hero-copy">
+				Calculez un devis clair avant de passer à la souscription. Le prix est conservé avec une référence valable deux semaines.
+			</p>
+		</div>
+		<div class="hero-actions">
+			<a pButton pRipple routerLink="/assurance/simulations" outlined icon="pi pi-list" label="Voir les simulations"></a>
+			<div class="hero-metric">
+				<span>Produits</span>
+				<strong>4</strong>
+				<small>offres automobiles</small>
+			</div>
+		</div>
+	</section>
+
+	<div class="assurance-grid">
+		<p-card styleClass="form-card">
+			<ng-template pTemplate="title">Caractéristiques du devis</ng-template>
+			<ng-template pTemplate="subtitle">Les champs servent directement au calcul de prime.</ng-template>
+
+			<p-message *ngIf="messageErreur" severity="error" styleClass="mb-4">
+				{{ messageErreur }}
+			</p-message>
+
+			<form [formGroup]="formSimulation" (ngSubmit)="enregistrer()" class="form-grid">
+				<label>
+					<span>Produit</span>
+					<select formControlName="produitCode" class="p-inputtext p-component">
+						<option value="">Sélectionner</option>
+						<option *ngFor="let produit of produits" [value]="produit.code">{{ produit.nom }}</option>
+					</select>
+				</label>
+
+				<label>
+					<span>Catégorie véhicule</span>
+					<select formControlName="categorieCode" class="p-inputtext p-component">
+						<option value="">Sélectionner</option>
+						<option *ngFor="let categorie of categories" [value]="categorie.code">
+							{{ categorie.code }} - {{ categorie.libelle }}
+						</option>
+					</select>
+				</label>
+
+				<label>
+					<span>Date première mise en circulation</span>
+					<input pInputText type="date" formControlName="datePremiereMiseEnCirculation"/>
+				</label>
+
+				<label>
+					<span>Puissance fiscale</span>
+					<input pInputText type="number" min="1" formControlName="puissanceFiscale" placeholder="Ex: 6"/>
+				</label>
+
+				<label>
+					<span>Valeur neuve</span>
+					<input pInputText type="number" min="1" formControlName="valeurNeuve" placeholder="Ex: 10000000"/>
+				</label>
+
+				<label>
+					<span>Valeur vénale</span>
+					<input pInputText type="number" min="1" formControlName="valeurVenale" placeholder="Ex: 6000000"/>
+				</label>
+
+				<div class="form-actions">
+					<button pButton pRipple type="submit" icon="pi pi-calculator" [label]="libelleAction()" [disabled]="chargement || formSimulation.disabled"></button>
+					<button *ngIf="simulationId" pButton pRipple type="button" outlined icon="pi pi-plus" label="Nouvelle simulation" (click)="nouvelleSimulation()"></button>
+					<p-progress-spinner *ngIf="chargement" ariaLabel="calcul" styleClass="spinner"></p-progress-spinner>
+				</div>
+			</form>
+		</p-card>
+
+		<p-card styleClass="result-card">
+			<ng-template pTemplate="title">Résultat</ng-template>
+
+			<div *ngIf="!simulation" class="empty-result">
+				<i class="pi pi-file-check"></i>
+				<h2>Votre devis apparaîtra ici</h2>
+				<p>Sélectionnez un produit, renseignez le véhicule puis lancez le calcul.</p>
+			</div>
+
+			<div *ngIf="simulation" class="quote-result">
+				<div class="quote-header">
+					<div>
+						<span>Référence devis</span>
+						<strong>{{ simulation.quoteReference }}</strong>
+					</div>
+					<div>
+						<span>Valide jusqu'au</span>
+						<strong>{{ simulation.endDate | date: 'dd/MM/yyyy' }}</strong>
+					</div>
+				</div>
+
+				<div class="price-box">
+					<span>Prime totale</span>
+					<strong>{{ formatMontant(simulation.price) }}</strong>
+				</div>
+
+				<p-divider></p-divider>
+
+				<div class="guarantees">
+					<div *ngFor="let garantie of simulation.garanties">
+						<span>{{ garantie.libelle }}</span>
+						<strong>{{ formatMontant(garantie.montant) }}</strong>
+					</div>
+				</div>
+
+				<button
+					pButton
+					pRipple
+					icon="pi pi-arrow-right"
+					label="Passer à la souscription"
+					class="w-full mt-4"
+					[disabled]="simulation.souscrite"
+					(click)="allerSouscription()"
+				></button>
+			</div>
+		</p-card>
+	</div>
+
+	<section *ngIf="produitSelectionne()" class="product-note">
+		<strong>{{ produitSelectionne()?.nom }}</strong>
+		<span>{{ produitSelectionne()?.description }}</span>
+	</section>
+</div>

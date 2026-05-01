@@ -1,0 +1,51 @@
+.list-page {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.list-hero {
+	align-items: center;
+	background: var(--surface-card);
+	border: 1px solid var(--surface-border);
+	border-left: .45rem solid var(--primary-color);
+	border-radius: 1.25rem;
+	color: var(--text-color);
+	display: flex;
+	justify-content: space-between;
+	padding: 1.75rem 2rem;
+}
+
+.eyebrow {
+	color: var(--primary-color);
+	font-size: .78rem;
+	font-weight: 800;
+	letter-spacing: .09rem;
+	margin: 0 0 .5rem;
+	text-transform: uppercase;
+}
+
+.list-hero h1,
+.list-hero p,
+.table-caption h2 {
+	margin: 0;
+}
+
+.table-caption {
+	align-items: center;
+	display: flex;
+	gap: 1rem;
+	justify-content: space-between;
+}
+
+.actions-cell {
+	text-align: right;
+}
+
+@media (max-width: 760px) {
+	.list-hero,
+	.table-caption {
+		align-items: stretch;
+		flex-direction: column;
+	}
+}

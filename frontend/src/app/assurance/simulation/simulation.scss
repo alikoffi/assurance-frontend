@@ -1,0 +1,171 @@
+.assurance-page {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.assurance-hero {
+	align-items: stretch;
+	background: var(--surface-card);
+	border: 1px solid var(--surface-border);
+	border-left: .45rem solid var(--primary-color);
+	border-radius: 1.25rem;
+	color: var(--text-color);
+	display: flex;
+	justify-content: space-between;
+	padding: 2rem;
+}
+
+.eyebrow {
+	color: var(--primary-color);
+	font-size: .8rem;
+	font-weight: 700;
+	letter-spacing: .08rem;
+	margin: 0 0 .75rem;
+	text-transform: uppercase;
+}
+
+h1 {
+	font-size: 2.2rem;
+	margin: 0;
+}
+
+.hero-copy {
+	max-width: 44rem;
+	opacity: .92;
+}
+
+.hero-metric {
+	align-items: center;
+	background: var(--surface-card);
+	border: 1px solid var(--surface-border);
+	border-radius: 1rem;
+	box-shadow: var(--card-shadow);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-width: 11rem;
+	padding: 1rem;
+}
+
+.hero-actions {
+	align-items: stretch;
+	display: flex;
+	gap: 1rem;
+}
+
+.hero-metric strong {
+	font-size: 3rem;
+	line-height: 1;
+}
+
+.assurance-grid {
+	display: grid;
+	gap: 1.5rem;
+	grid-template-columns: minmax(0, 1.2fr) minmax(22rem, .8fr);
+}
+
+.form-grid {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+label {
+	display: flex;
+	flex-direction: column;
+	gap: .45rem;
+}
+
+label span {
+	color: var(--text-color-secondary);
+	font-size: .85rem;
+	font-weight: 700;
+}
+
+.form-actions {
+	align-items: center;
+	display: flex;
+	gap: 1rem;
+	grid-column: 1 / -1;
+	margin-top: .5rem;
+}
+
+.spinner {
+	height: 2rem;
+	width: 2rem;
+}
+
+.empty-result {
+	align-items: center;
+	color: var(--text-color-secondary);
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	min-height: 24rem;
+	text-align: center;
+}
+
+.empty-result i {
+	color: var(--primary-color);
+	font-size: 3rem;
+}
+
+.quote-header,
+.guarantees > div {
+	display: flex;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.quote-header span,
+.price-box span,
+.guarantees span {
+	color: var(--text-color-secondary);
+	display: block;
+	font-size: .85rem;
+}
+
+.price-box {
+	background: var(--primary-color);
+	border-radius: 1rem;
+	color: #fff;
+	margin-top: 1rem;
+	padding: 1.25rem;
+}
+
+.price-box strong {
+	display: block;
+	font-size: 2rem;
+	margin-top: .25rem;
+}
+
+.guarantees {
+	display: flex;
+	flex-direction: column;
+	gap: .75rem;
+}
+
+.product-note {
+	align-items: center;
+	background: var(--surface-card);
+	border-left: 5px solid var(--primary-color);
+	border-radius: .75rem;
+	box-shadow: var(--card-shadow);
+	display: flex;
+	gap: 1rem;
+	padding: 1rem 1.25rem;
+}
+
+@media (max-width: 960px) {
+	.assurance-hero,
+	.hero-actions,
+	.product-note {
+		flex-direction: column;
+	}
+
+	.assurance-grid,
+	.form-grid {
+		grid-template-columns: 1fr;
+	}
+}

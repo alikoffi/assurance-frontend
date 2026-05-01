@@ -1,0 +1,196 @@
+﻿<div class="subscription-page">
+	<section class="subscription-header">
+		<div>
+			<p class="eyebrow">Souscription</p>
+			<h1>Transformer un devis en contrat</h1>
+			<p>Devis, véhicule, assuré, validation.</p>
+		</div>
+	</section>
+
+	<p-card styleClass="steps-card">
+		<p-steps [model]="steps" [activeIndex]="activeIndex" [readonly]="true"></p-steps>
+	</p-card>
+
+	<p-message *ngIf="messageErreur" severity="error">
+		{{ messageErreur }}
+	</p-message>
+
+	<p-card *ngIf="activeIndex === 0" styleClass="panel-card">
+		<ng-template pTemplate="title">Étape 1 - Devis</ng-template>
+		<ng-template pTemplate="subtitle">Sélectionnez une simulation ouverte et non encore souscrite.</ng-template>
+
+		<form [formGroup]="formDevis" (ngSubmit)="chargerSimulation()" class="devis-form">
+			<label>
+				<span>Devis disponible</span>
+				<p-select
+					formControlName="simulationId"
+					[options]="simulationsDisponibles"
+					[optionLabel]="'quoteReference'"
+					optionValue="id"
+					[filter]="true"
+					filterBy="quoteReference,produitNom,categorieCode"
+					appendTo="body"
+					placeholder="Sélectionner un devis"
+					[loading]="chargementSimulations"
+				>
+					<ng-template #selectedItem let-simulation>
+						<span *ngIf="simulation">{{ simulation.quoteReference }} - {{ simulation.produitNom }}</span>
+					</ng-template>
+					<ng-template #item let-simulation>
+						<div class="simulation-option">
+							<strong>{{ simulation.quoteReference }}</strong>
+							<span>{{ simulation.produitNom }} - {{ formatMontant(simulation.price) }}</span>
+							<small>Valable jusqu'au {{ simulation.endDate | date: 'dd/MM/yyyy' }}</small>
+						</div>
+					</ng-template>
+				</p-select>
+			</label>
+
+			<div *ngIf="!chargementSimulations && simulationsDisponibles.length === 0" class="empty-devis">
+				<i class="pi pi-info-circle"></i>
+				<span>Aucun devis ouvert. Créez une simulation avant de lancer une souscription.</span>
+			</div>
+
+			<div class="actions">
+				<button pButton pRipple type="submit" icon="pi pi-arrow-right" label="Continuer" [disabled]="chargementSimulations || chargement || simulationsDisponibles.length === 0"></button>
+				<p-progress-spinner *ngIf="chargementSimulations || chargement" ariaLabel="chargement" styleClass="spinner"></p-progress-spinner>
+			</div>
+		</form>
+	</p-card>
+
+	<p-card *ngIf="activeIndex === 1 && simulation" styleClass="panel-card">
+		<ng-template pTemplate="title">Étape 2 - Véhicule</ng-template>
+		<ng-template pTemplate="subtitle">Les données principales viennent du devis.</ng-template>
+
+		<div class="quote-strip">
+			<div>
+				<span>Devis</span>
+				<strong>{{ simulation.quoteReference }}</strong>
+			</div>
+			<div>
+				<span>Produit</span>
+				<strong>{{ simulation.produitNom }}</strong>
+			</div>
+			<div>
+				<span>Prime</span>
+				<strong>{{ formatMontant(simulation.price) }}</strong>
+			</div>
+		</div>
+
+		<form [formGroup]="formVehicule" class="form-grid">
+			<label>
+				<span>Numéro d'immatriculation</span>
+				<input pInputText formControlName="numeroImmatriculation" placeholder="Ex: CI-1234-AB"/>
+			</label>
+
+			<label>
+				<span>Couleur</span>
+				<input pInputText formControlName="couleur" placeholder="Ex: Noir"/>
+			</label>
+
+			<label>
+				<span>Nombre de sièges</span>
+				<input pInputText type="number" min="1" formControlName="nombreSieges"/>
+			</label>
+
+			<label>
+				<span>Nombre de portes</span>
+				<input pInputText type="number" min="1" formControlName="nombrePortes"/>
+			</label>
+		</form>
+
+		<div class="actions between">
+			<button pButton pRipple type="button" icon="pi pi-arrow-left" label="Retour" severity="secondary" outlined (click)="retour(0)"></button>
+			<button pButton pRipple type="button" icon="pi pi-arrow-right" label="Continuer" (click)="validerVehicule()"></button>
+		</div>
+	</p-card>
+
+	<p-card *ngIf="activeIndex === 2" styleClass="panel-card">
+		<ng-template pTemplate="title">Étape 3 - Assuré</ng-template>
+		<ng-template pTemplate="subtitle">Informations du client assuré.</ng-template>
+
+		<form [formGroup]="formAssure" class="form-grid">
+			<label>
+				<span>Nom</span>
+				<input pInputText formControlName="nom" placeholder="Ex: Kouame"/>
+			</label>
+
+			<label>
+				<span>Prénom</span>
+				<input pInputText formControlName="prenom" placeholder="Ex: Awa"/>
+			</label>
+
+			<label>
+				<span>Téléphone</span>
+				<input pInputText formControlName="telephone" placeholder="Ex: 0102030405"/>
+			</label>
+
+			<label>
+				<span>Numéro carte d'identité</span>
+				<input pInputText formControlName="numeroCarteIdentite" placeholder="Ex: CI123456"/>
+			</label>
+
+			<label>
+				<span>Ville</span>
+				<input pInputText formControlName="ville" placeholder="Ex: Abidjan"/>
+			</label>
+
+			<label class="wide">
+				<span>Adresse</span>
+				<input pInputText formControlName="adresse" placeholder="Ex: Cocody"/>
+			</label>
+		</form>
+
+		<div class="actions between">
+			<button pButton pRipple type="button" icon="pi pi-arrow-left" label="Retour" severity="secondary" outlined (click)="retour(1)"></button>
+			<button pButton pRipple type="button" icon="pi pi-arrow-right" label="Récapitulatif" (click)="validerAssure()"></button>
+		</div>
+	</p-card>
+
+	<p-card *ngIf="activeIndex === 3 && simulation" styleClass="panel-card">
+		<ng-template pTemplate="title">Étape 4 - Validation</ng-template>
+		<ng-template pTemplate="subtitle">Contrôlez le récapitulatif.</ng-template>
+
+		<div class="summary-grid">
+			<div class="summary-box">
+				<span>Devis</span>
+				<strong>{{ simulation.quoteReference }}</strong>
+				<small>{{ simulation.produitNom }} - Catégorie {{ simulation.categorieCode }}</small>
+			</div>
+			<div class="summary-box">
+				<span>Prime</span>
+				<strong>{{ formatMontant(simulation.price) }}</strong>
+				<small>Valable jusqu'au {{ simulation.endDate | date: 'dd/MM/yyyy' }}</small>
+			</div>
+			<div class="summary-box">
+				<span>Véhicule</span>
+				<strong>{{ formVehicule.controls.numeroImmatriculation.value }}</strong>
+				<small>{{ formVehicule.controls.couleur.value }} - {{ formVehicule.controls.nombreSieges.value }} sièges</small>
+			</div>
+			<div class="summary-box">
+				<span>Assuré</span>
+				<strong>{{ formAssure.controls.prenom.value }} {{ formAssure.controls.nom.value }}</strong>
+				<small>{{ formAssure.controls.telephone.value }} - {{ formAssure.controls.ville.value }}</small>
+			</div>
+		</div>
+
+		<p-divider></p-divider>
+
+		<div *ngIf="souscription" class="success-box">
+			<i class="pi pi-check-circle"></i>
+			<div>
+				<h2>Souscription validée</h2>
+				<p>Référence {{ souscription.subscriptionReference }} - Attestation {{ souscription.numeroAttestation }}</p>
+			</div>
+		</div>
+
+		<div class="actions between">
+			<button pButton pRipple type="button" icon="pi pi-arrow-left" label="Retour" severity="secondary" outlined (click)="retour(2)" [disabled]="!!souscription"></button>
+			<div class="right-actions">
+				<button *ngIf="!souscription" pButton pRipple type="button" icon="pi pi-check" label="Valider la souscription" (click)="confirmer()" [disabled]="chargement"></button>
+				<button *ngIf="souscription" pButton pRipple type="button" icon="pi pi-download" label="Télécharger l'attestation" (click)="telechargerAttestation()"></button>
+				<p-progress-spinner *ngIf="chargement" ariaLabel="validation" styleClass="spinner"></p-progress-spinner>
+			</div>
+		</div>
+	</p-card>
+</div>

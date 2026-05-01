@@ -1,0 +1,18 @@
+﻿<div class="layout-topbar-start">
+	<a class="layout-topbar-logo" routerLink="/">
+		<span>Action'Elles</span>
+	</a>
+	<a #menuButton class="layout-menu-button" (click)="onMenuButtonClick()">
+		<i class="pi pi-chevron-right"></i>
+	</a>
+
+	<a #mobileMenuButton class="layout-topbar-mobile-button" (click)="onTopbarMenuToggle()">
+		<i class="pi pi-ellipsis-v"></i>
+	</a>
+</div>
+
+<div class="layout-topbar-end">
+	<div class="layout-topbar-actions-end">
+		<ul class="layout-topbar-items"></ul>
+	</div>
+</div>

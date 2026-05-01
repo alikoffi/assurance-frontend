@@ -1,0 +1,68 @@
+<div class="list-page">
+	<section class="list-hero">
+		<div>
+			<p class="eyebrow">Portefeuille</p>
+			<h1>Souscriptions</h1>
+			<p>Contrats validés.</p>
+		</div>
+		<a pButton pRipple routerLink="/assurance/souscription" icon="pi pi-plus" label="Nouvelle souscription"></a>
+	</section>
+
+	<p-message *ngIf="messageErreur" severity="error" styleClass="mb-3">
+		{{ messageErreur }}
+	</p-message>
+
+	<p-card>
+		<p-table
+			#dt
+			[value]="souscriptions"
+			[loading]="chargement"
+			[paginator]="true"
+			[rows]="10"
+			[rowsPerPageOptions]="[10, 20, 50]"
+			[globalFilterFields]="['subscriptionReference', 'quoteReference', 'numeroAttestation', 'statut', 'utilisateurNom']"
+			responsiveLayout="scroll"
+		>
+			<ng-template #caption>
+				<div class="table-caption">
+					<h2>Liste</h2>
+					<p-iconfield>
+						<p-inputicon styleClass="pi pi-search"></p-inputicon>
+						<input pInputText type="text" placeholder="Rechercher..." (input)="onGlobalFilter(dt, $event)"/>
+					</p-iconfield>
+				</div>
+			</ng-template>
+			<ng-template #header>
+				<tr>
+					<th pSortableColumn="subscriptionReference">Souscription <p-sortIcon field="subscriptionReference"></p-sortIcon></th>
+					<th pSortableColumn="quoteReference">Devis <p-sortIcon field="quoteReference"></p-sortIcon></th>
+					<th pSortableColumn="numeroAttestation">Attestation <p-sortIcon field="numeroAttestation"></p-sortIcon></th>
+					<th pSortableColumn="utilisateurNom">Amazone <p-sortIcon field="utilisateurNom"></p-sortIcon></th>
+					<th pSortableColumn="dateSouscription">Date <p-sortIcon field="dateSouscription"></p-sortIcon></th>
+					<th pSortableColumn="price">Prime <p-sortIcon field="price"></p-sortIcon></th>
+					<th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th>
+					<th></th>
+				</tr>
+			</ng-template>
+			<ng-template #body let-souscription>
+				<tr>
+					<td>{{ souscription.subscriptionReference }}</td>
+					<td>{{ souscription.quoteReference }}</td>
+					<td>{{ souscription.numeroAttestation }}</td>
+					<td>{{ souscription.utilisateurNom || '-' }}</td>
+					<td>{{ souscription.dateSouscription | date: 'dd/MM/yyyy HH:mm' }}</td>
+					<td>{{ formatMontant(souscription.price) }}</td>
+					<td><p-tag [value]="souscription.statut" severity="success"></p-tag></td>
+					<td class="actions-cell">
+						<button pButton pRipple icon="pi pi-download" rounded outlined (click)="telechargerAttestation(souscription)"></button>
+					</td>
+				</tr>
+			</ng-template>
+			<ng-template #emptymessage>
+				<tr>
+					<td colspan="8">Aucune souscription.</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</p-card>
+</div>

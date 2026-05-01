@@ -1,0 +1,61 @@
+﻿<main class="login-page">
+	<section class="login-card">
+		<div class="brand-panel">
+			<div class="brand-mark">
+				<img src="/images/app/logo-action-elles.png" alt="Action'Elles"/>
+			</div>
+			<div>
+				<p class="eyebrow">Action'Elles x NSIAGO'ASSUR</p>
+				<h1>Assurer, protéger, accompagner.</h1>
+				<p class="brand-text">
+					Espace de simulation et de souscription automobile dédié aux amazones.
+				</p>
+			</div>
+		</div>
+
+		<div class="form-panel">
+			<div class="form-heading">
+				<p class="eyebrow">Connexion</p>
+				<h2>Accéder à mon espace</h2>
+				<span>Renseignez vos identifiants pour continuer.</span>
+			</div>
+
+			<p-message *ngIf="messageErreur" severity="error" size="small" styleClass="w-full" icon="pi pi-times-circle">
+				{{ messageErreur.messageAvecCode || messageErreur.message }}
+			</p-message>
+
+			<form [formGroup]="formAuthentification" (ngSubmit)="authentifier()">
+				<label>
+					<span>Nom d'utilisateur</span>
+					<p-input-group>
+						<p-inputgroup-addon>
+							<i class="pi pi-user"></i>
+						</p-inputgroup-addon>
+						<input pInputText type="text" formControlName="username" placeholder="Ex: amazone1"/>
+					</p-input-group>
+				</label>
+
+				<label>
+					<span>Mot de passe</span>
+					<p-input-group>
+						<p-inputgroup-addon>
+							<i class="pi pi-lock"></i>
+						</p-inputgroup-addon>
+						<input pInputText type="password" formControlName="password" placeholder="Votre mot de passe"/>
+					</p-input-group>
+				</label>
+
+				<button
+					pButton
+					pRipple
+					type="submit"
+					class="w-full"
+					icon="pi pi-arrow-right"
+					iconPos="right"
+					label="Se connecter"
+					[disabled]="formAuthentification.invalid || chargement">
+				</button>
+			</form>
+		</div>
+	</section>
+</main>

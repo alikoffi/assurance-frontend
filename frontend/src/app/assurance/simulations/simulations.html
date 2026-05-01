@@ -1,0 +1,103 @@
+﻿<div class="list-page">
+	<section class="list-hero">
+		<div>
+			<p class="eyebrow">Devis</p>
+			<h1>Simulations</h1>
+			<p>Retrouvez les devis calculés, modifiez ceux qui sont encore ouverts ou lancez directement la souscription.</p>
+		</div>
+		<a pButton pRipple routerLink="/assurance/simulation" icon="pi pi-plus" label="Nouvelle simulation"></a>
+	</section>
+
+	<p-message *ngIf="messageErreur" severity="error" styleClass="mb-3">
+		{{ messageErreur }}
+	</p-message>
+
+	<p-card>
+		<p-table
+			#dt
+			[value]="simulations"
+			[loading]="chargement"
+			[paginator]="true"
+			[rows]="10"
+			[rowsPerPageOptions]="[10, 20, 50]"
+			[globalFilterFields]="['quoteReference', 'produitNom', 'produitCode', 'categorieCode', 'utilisateurNom']"
+			responsiveLayout="scroll"
+		>
+			<ng-template #caption>
+				<div class="table-caption">
+					<div>
+						<h2>Liste des simulations</h2>
+						<span>{{ simulations.length }} devis enregistré(s)</span>
+					</div>
+					<p-iconfield>
+						<p-inputicon styleClass="pi pi-search"></p-inputicon>
+						<input pInputText type="text" placeholder="Rechercher..." (input)="onGlobalFilter(dt, $event)"/>
+					</p-iconfield>
+				</div>
+			</ng-template>
+
+			<ng-template #header>
+				<tr>
+					<th pSortableColumn="quoteReference">Référence <p-sortIcon field="quoteReference"></p-sortIcon></th>
+					<th pSortableColumn="produitNom">Produit <p-sortIcon field="produitNom"></p-sortIcon></th>
+					<th pSortableColumn="categorieCode">Catégorie <p-sortIcon field="categorieCode"></p-sortIcon></th>
+					<th pSortableColumn="endDate">Validité <p-sortIcon field="endDate"></p-sortIcon></th>
+					<th pSortableColumn="price">Prime <p-sortIcon field="price"></p-sortIcon></th>
+					<th pSortableColumn="utilisateurNom">Amazone <p-sortIcon field="utilisateurNom"></p-sortIcon></th>
+					<th>Statut</th>
+					<th class="actions-header">Actions</th>
+				</tr>
+			</ng-template>
+
+			<ng-template #body let-simulation>
+				<tr>
+					<td>
+						<strong>{{ simulation.quoteReference }}</strong>
+						<div class="muted">{{ simulation.garanties.length }} garantie(s)</div>
+					</td>
+					<td>{{ simulation.produitNom }}</td>
+					<td>{{ simulation.categorieCode }}</td>
+					<td>{{ simulation.endDate | date: 'dd/MM/yyyy' }}</td>
+					<td>{{ formatMontant(simulation.price) }}</td>
+					<td>{{ simulation.utilisateurNom || '-' }}</td>
+					<td><p-tag [value]="statutLibelle(simulation)" [severity]="statutSeverity(simulation)"></p-tag></td>
+					<td class="actions-cell">
+						<button
+							pButton
+							pRipple
+							icon="pi pi-pencil"
+							rounded
+							outlined
+							[disabled]="!simulation.modifiable"
+							pTooltip="Modifier"
+							aria-label="Modifier la simulation"
+							(click)="modifier(simulation)"
+						></button>
+						<button
+							pButton
+							pRipple
+							icon="pi pi-arrow-right"
+							rounded
+							[disabled]="!peutSouscrire(simulation)"
+							pTooltip="Souscrire"
+							aria-label="Souscrire à partir de la simulation"
+							(click)="souscrire(simulation)"
+						></button>
+					</td>
+				</tr>
+			</ng-template>
+
+			<ng-template #emptymessage>
+				<tr>
+					<td colspan="8">
+						<div class="empty-state">
+							<i class="pi pi-file-check"></i>
+							<strong>Aucune simulation</strong>
+							<span>Créez une simulation pour obtenir un devis et démarrer une souscription.</span>
+						</div>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</p-card>
+</div>

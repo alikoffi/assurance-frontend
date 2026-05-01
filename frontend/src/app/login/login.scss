@@ -1,0 +1,175 @@
+.login-page {
+	min-height: 100vh;
+	display: grid;
+	place-items: center;
+	padding: 2rem;
+	background:
+		radial-gradient(circle at 18% 20%, rgba(210, 55, 145, .18), transparent 30rem),
+		radial-gradient(circle at 82% 12%, rgba(80, 25, 132, .16), transparent 28rem),
+		linear-gradient(135deg, #fff7fb 0%, #f8f3ff 50%, #ffffff 100%);
+}
+
+.login-card {
+	width: min(1060px, 100%);
+	min-height: 620px;
+	display: grid;
+	grid-template-columns: 1.05fr .95fr;
+	overflow: hidden;
+	border-radius: 2rem;
+	background: rgba(255, 255, 255, .92);
+	box-shadow: 0 2rem 5rem rgba(45, 16, 73, .18);
+	border: 1px solid rgba(80, 25, 132, .12);
+}
+
+.brand-panel {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 2rem;
+	padding: 3rem;
+	color: #fff;
+	background:
+		radial-gradient(circle at 20% 20%, rgba(255, 255, 255, .18), transparent 16rem),
+		linear-gradient(145deg, rgba(80, 25, 132, .96), rgba(210, 55, 145, .9));
+}
+
+.brand-panel::after {
+	content: '';
+	position: absolute;
+	inset: 1.25rem;
+	border: 1px solid rgba(255, 255, 255, .25);
+	border-radius: 1.5rem;
+	pointer-events: none;
+}
+
+.brand-mark {
+	position: relative;
+	z-index: 1;
+	width: 13rem;
+	height: 13rem;
+	display: grid;
+	place-items: center;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, .94);
+	box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, .16);
+}
+
+.brand-mark img {
+	width: 10.5rem;
+	height: 10.5rem;
+	object-fit: contain;
+}
+
+.brand-panel > div:last-child {
+	position: relative;
+	z-index: 1;
+	max-width: 34rem;
+}
+
+.eyebrow {
+	margin: 0 0 .7rem;
+	font-size: .78rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: .18em;
+	color: #d23791;
+}
+
+.brand-panel .eyebrow {
+	color: #ffd5ed;
+}
+
+.brand-panel h1 {
+	margin: 0;
+	font-size: clamp(2.3rem, 5vw, 4.4rem);
+	line-height: .95;
+	font-weight: 900;
+	letter-spacing: -.05em;
+}
+
+.brand-text {
+	max-width: 30rem;
+	margin: 1.2rem 0 0;
+	font-size: 1rem;
+	line-height: 1.7;
+	color: rgba(255, 255, 255, .86);
+}
+
+.form-panel {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1.4rem;
+	padding: 3rem;
+}
+
+.form-heading h2 {
+	margin: 0;
+	color: #2d1049;
+	font-size: clamp(2rem, 4vw, 3rem);
+	line-height: 1;
+	letter-spacing: -.04em;
+}
+
+.form-heading span {
+	display: block;
+	margin-top: .75rem;
+	color: #6f627a;
+}
+
+form {
+	display: grid;
+	gap: 1.1rem;
+}
+
+label {
+	display: grid;
+	gap: .45rem;
+	color: #2d1049;
+	font-weight: 700;
+}
+
+label span {
+	font-size: .9rem;
+}
+
+:host ::ng-deep .p-inputtext {
+	width: 100%;
+}
+
+:host ::ng-deep .p-button {
+	margin-top: .6rem;
+	background: linear-gradient(135deg, #501984, #d23791);
+	border: 0;
+}
+
+@media (max-width: 860px) {
+	.login-page {
+		padding: 1rem;
+	}
+
+	.login-card {
+		grid-template-columns: 1fr;
+		min-height: auto;
+	}
+
+	.brand-panel {
+		min-height: 20rem;
+		padding: 2rem;
+	}
+
+	.brand-mark {
+		width: 9rem;
+		height: 9rem;
+	}
+
+	.brand-mark img {
+		width: 7.5rem;
+		height: 7.5rem;
+	}
+
+	.form-panel {
+		padding: 2rem;
+	}
+}

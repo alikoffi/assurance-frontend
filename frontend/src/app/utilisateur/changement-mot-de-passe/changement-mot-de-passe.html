@@ -1,0 +1,38 @@
+<div class="password-page">
+	<section class="password-hero">
+		<p class="eyebrow">Sécurité du compte</p>
+		<h1>Mot de passe</h1>
+		<p>Définissez votre mot de passe personnel.</p>
+	</section>
+
+	<p-card styleClass="password-card">
+		<p-message *ngIf="messageErreur" severity="error" styleClass="mb-4">
+			{{ messageErreur }}
+		</p-message>
+		<p-message *ngIf="messageSucces" severity="success" styleClass="mb-4">
+			{{ messageSucces }}
+		</p-message>
+
+		<form [formGroup]="form" (ngSubmit)="changer()" class="password-form">
+			<label>
+				<span>Ancien mot de passe</span>
+				<p-password formControlName="ancienMotDePasse" [feedback]="false" [toggleMask]="true" inputStyleClass="w-full"></p-password>
+			</label>
+
+			<label>
+				<span>Nouveau mot de passe</span>
+				<p-password formControlName="nouveauMotDePasse" [toggleMask]="true" inputStyleClass="w-full"></p-password>
+			</label>
+
+			<label>
+				<span>Confirmation</span>
+				<p-password formControlName="confirmationMotDePasse" [feedback]="false" [toggleMask]="true" inputStyleClass="w-full"></p-password>
+			</label>
+
+			<div class="actions">
+				<button pButton pRipple type="submit" icon="pi pi-shield" label="Modifier mon mot de passe" [disabled]="chargement"></button>
+				<p-progress-spinner *ngIf="chargement" ariaLabel="chargement" styleClass="spinner"></p-progress-spinner>
+			</div>
+		</form>
+	</p-card>
+</div>

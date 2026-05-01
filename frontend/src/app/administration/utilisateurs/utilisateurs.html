@@ -1,0 +1,117 @@
+<div class="users-page">
+	<section class="users-hero">
+		<div>
+			<p class="eyebrow">Administration</p>
+			<h1>Utilisateurs</h1>
+			<p>Comptes administrateurs et amazones.</p>
+		</div>
+		<button pButton pRipple icon="pi pi-user-plus" label="Nouvel utilisateur" (click)="ouvrirCreation()"></button>
+	</section>
+
+	<p-message *ngIf="messageErreur" severity="error" styleClass="mb-3">
+		{{ messageErreur }}
+	</p-message>
+
+	<p-card>
+		<p-table
+			#dt
+			[value]="utilisateurs"
+			[loading]="chargement"
+			[paginator]="true"
+			[rows]="10"
+			[rowsPerPageOptions]="[10, 20, 50]"
+			[globalFilterFields]="['username', 'nom', 'prenoms', 'role', 'statut']"
+			responsiveLayout="scroll"
+			dataKey="id"
+		>
+			<ng-template #caption>
+				<div class="table-caption">
+					<h2>Comptes applicatifs</h2>
+					<p-iconfield>
+						<p-inputicon styleClass="pi pi-search"></p-inputicon>
+						<input pInputText type="text" placeholder="Rechercher..." (input)="onGlobalFilter(dt, $event)"/>
+					</p-iconfield>
+				</div>
+			</ng-template>
+			<ng-template #header>
+				<tr>
+					<th pSortableColumn="username">Login <p-sortIcon field="username"></p-sortIcon></th>
+					<th pSortableColumn="prenoms">Prénoms <p-sortIcon field="prenoms"></p-sortIcon></th>
+					<th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+					<th pSortableColumn="role">Role <p-sortIcon field="role"></p-sortIcon></th>
+					<th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th>
+					<th>Mot de passe</th>
+					<th></th>
+				</tr>
+			</ng-template>
+			<ng-template #body let-utilisateur>
+				<tr>
+					<td>{{ utilisateur.username }}</td>
+					<td>{{ utilisateur.prenoms }}</td>
+					<td>{{ utilisateur.nom }}</td>
+					<td>{{ libelleRole(utilisateur.role) }}</td>
+					<td><p-tag [value]="utilisateur.statut" [severity]="severiteStatut(utilisateur.statut)"></p-tag></td>
+					<td>
+						<p-tag
+							[value]="utilisateur.mustChangePassword ? 'Temporaire' : 'Personnel'"
+							[severity]="utilisateur.mustChangePassword ? 'warn' : 'success'"
+						></p-tag>
+					</td>
+					<td class="actions-cell">
+						<button pButton pRipple icon="pi pi-pencil" rounded outlined (click)="ouvrirModification(utilisateur)"></button>
+					</td>
+				</tr>
+			</ng-template>
+			<ng-template #emptymessage>
+				<tr>
+					<td colspan="7">Aucun utilisateur trouvé.</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</p-card>
+
+	<p-dialog
+		[(visible)]="dialogVisible"
+		[modal]="true"
+		[style]="{width: '560px'}"
+		[header]="utilisateurSelectionne ? 'Modifier utilisateur' : 'Nouvel utilisateur'"
+	>
+		<form [formGroup]="form" class="user-form">
+			<label>
+				<span>Login</span>
+				<input pInputText formControlName="username" placeholder="ex: amazone3"/>
+			</label>
+
+			<label>
+				<span>{{ utilisateurSelectionne ? 'Nouveau mot de passe temporaire (optionnel)' : 'Mot de passe temporaire' }}</span>
+				<p-password formControlName="password" [toggleMask]="true" inputStyleClass="w-full"></p-password>
+			</label>
+
+			<label>
+				<span>Prénoms</span>
+				<input pInputText formControlName="prenoms" placeholder="ex: Awa"/>
+			</label>
+
+			<label>
+				<span>Nom</span>
+				<input pInputText formControlName="nom" placeholder="ex: Kouame"/>
+			</label>
+
+			<label>
+				<span>Role</span>
+				<p-select formControlName="role" [options]="roles" optionLabel="label" optionValue="value" appendTo="body"></p-select>
+			</label>
+
+			<label>
+				<span>Statut</span>
+				<p-select formControlName="statut" [options]="statuts" optionLabel="label" optionValue="value" appendTo="body"></p-select>
+			</label>
+		</form>
+
+		<ng-template #footer>
+			<button pButton pRipple type="button" label="Annuler" severity="secondary" text (click)="dialogVisible = false"></button>
+			<button pButton pRipple type="button" icon="pi pi-save" label="Enregistrer" (click)="enregistrer()" [disabled]="enregistrement"></button>
+			<p-progress-spinner *ngIf="enregistrement" ariaLabel="enregistrement" styleClass="spinner"></p-progress-spinner>
+		</ng-template>
+	</p-dialog>
+</div>
