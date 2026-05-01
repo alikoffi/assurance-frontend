@@ -15,8 +15,15 @@ Le frontend permet aux amazones de réaliser des simulations, créer des souscri
 
 ## Prérequis
 
+### Lancement local (npm)
+
 - Node.js compatible avec Angular 19
 - npm
+- Backend Action'Elles Assurance démarré sur `http://localhost:8075`
+
+### Lancement via Docker
+
+- Docker Desktop
 - Backend Action'Elles Assurance démarré sur `http://localhost:8075`
 
 ## Installation
@@ -38,6 +45,46 @@ L'application est disponible sur :
 ```text
 http://localhost:4600
 ```
+
+## Lancement avec Docker Compose
+
+Depuis la **racine du projet** (là où se trouve `docker-compose.yml`) :
+
+```bash
+docker compose up --build
+```
+
+L'application est disponible sur :
+
+```text
+http://localhost:4600
+```
+
+Le flag `--build` reconstruit l'image à chaque fois. Pour les lancements suivants sans changement de code :
+
+```bash
+docker compose up
+```
+
+Pour arrêter :
+
+```bash
+docker compose down
+```
+
+### Fonctionnement Docker
+
+| Fichier | Rôle |
+| --- | --- |
+| `frontend/Dockerfile` | Build multi-stage : Node 20 compile l'app, Nginx la sert. |
+| `frontend/nginx.conf` | Configure Nginx pour le routing Angular (SPA). |
+| `frontend/.dockerignore` | Exclut `node_modules` et `dist` du contexte de build. |
+| `docker-compose.yml` | Orchestre le service frontend sur le port 4600. |
+
+Le build se déroule en deux étapes :
+
+1. **Stage 1 (Node 20)** — installe les dépendances et compile l'app Angular (`ng build`).
+2. **Stage 2 (Nginx)** — copie uniquement les fichiers compilés et les sert. L'image finale ne contient pas Node.js (~40 Mo au lieu de ~600 Mo).
 
 ## Configuration
 
